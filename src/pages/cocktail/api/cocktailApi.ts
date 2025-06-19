@@ -21,13 +21,14 @@ export const cocktailApi = createApi({
           id: cocktail.idDrink,
           name: cocktail.strDrink,
           category: cocktail.strCategory,
+          alcoholic: cocktail.strAlcoholic,
           glass: cocktail.strGlass,
           instructions: cocktail.strInstructions,
-          measures: Object.entries(cocktail).filter(value => value[0].startsWith('strMeasure')).map(value => value[1]),
-          ingredients: Object.entries(cocktail).filter(value => value[0].startsWith('strIngredients')).map(value => value[1]),
+          measures: Object.entries(cocktail).filter(value => value[0].startsWith('strMeasure') && value[1]).map(value => value[1]),
+          ingredients: Object.entries(cocktail).filter(value => value[0].startsWith('strIngredient') && value[1]).map(value => value[1]),
           thumb: cocktail.strDrinkThumb,
-        }));
-      }
+        }))
+      },
     }),
   }),
 })

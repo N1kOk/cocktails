@@ -1,7 +1,7 @@
 interface CocktailModel {
   id: string
   name: string
-  tags?: string[]
+  alcoholic: string
   category: string
   glass: string
   instructions: string

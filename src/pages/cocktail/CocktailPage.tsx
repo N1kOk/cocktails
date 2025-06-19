@@ -1,12 +1,35 @@
 import type { FC } from 'react'
-import { useParams } from 'react-router'
+import { NavLink, useParams } from 'react-router'
+import { cocktailCodes } from '@/pages/cocktail/model/cocktailCodes.ts'
+import { useGetCocktailsByNameQuery } from '@/pages/cocktail/api/cocktailApi.ts'
+import { CocktailDetails } from '@/pages/cocktail/ui/CocktailDetails.tsx'
+import styles from './CocktailPage.module.scss'
+import { getErrorMessage } from '@/shared/lib/getErrorMessage.ts'
+import { capitalize } from '@/shared/lib/capitalize.ts'
 
 type SearchParams = { cocktailCode: string }
 
 export const CocktailPage: FC = () => {
   const { cocktailCode } = useParams<SearchParams>()
+  const { data: cocktails, isFetching, isError, error } = useGetCocktailsByNameQuery(cocktailCode ?? cocktailCodes[0])
 
   return (
-    <>{cocktailCode}</>
+    <div className={styles.container}>
+      <nav className={styles.nav}>
+        {cocktailCodes.map(item => <NavLink key={item} to={`/${item}`}>{capitalize(item)}</NavLink>)}
+      </nav>
+
+      <main className={styles.main}>
+        {(() => {
+          if (isFetching) return <h1>Loading...</h1>
+          if (isError) return <div>{getErrorMessage(error)}</div>
+          if (!cocktails || cocktails.length === 0) return <h1>Cocktails not found</h1>
+
+          return cocktails.map(item => (
+            <CocktailDetails key={item.id} cocktail={item}/>
+          ))
+        })()}
+      </main>
+    </div>
   )
 }
