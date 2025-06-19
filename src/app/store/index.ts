@@ -1,7 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { cocktailApi } from '@/pages/cocktail'
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    [cocktailApi.reducerPath]: cocktailApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(cocktailApi.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>
