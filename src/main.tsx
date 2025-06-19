@@ -1,15 +1,11 @@
 import 'modern-normalize/modern-normalize.css'
-import '@/app/globals.css'
+import '@/app/styles/globals.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import App from '@/App.tsx'
-import { Provider } from 'react-redux'
-import { store } from '@/app/store'
+import App from '@/app/App.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Provider store={store}>
       <App/>
-    </Provider>
   </StrictMode>,
 )
