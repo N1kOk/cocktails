@@ -2,16 +2,30 @@ import type { FC } from 'react'
 import { NavLink, useParams } from 'react-router'
 import { cocktailCodes } from '@/pages/cocktail/model/cocktailCodes.ts'
 import { useGetCocktailsByNameQuery } from '@/pages/cocktail/api/cocktailApi.ts'
-import { CocktailDetails } from '@/pages/cocktail/ui/CocktailDetails.tsx'
 import styles from './CocktailPage.module.scss'
-import { getErrorMessage } from '@/shared/lib/getErrorMessage.ts'
-import { capitalize } from '@/shared/lib/capitalize.ts'
+import { CocktailDetails } from '@/pages/cocktail/ui/CocktailDetails.tsx'
+import { capitalize, getErrorMessage } from '@/shared/lib'
 
 type SearchParams = { cocktailCode: string }
 
 export const CocktailPage: FC = () => {
   const { cocktailCode } = useParams<SearchParams>()
   const { data: cocktails, isFetching, isError, error } = useGetCocktailsByNameQuery(cocktailCode ?? cocktailCodes[0])
+
+  const renderCocktails = () => {
+    if (isFetching)
+      return <h1>Loading...</h1>
+
+    if (isError)
+      return <div>{getErrorMessage(error)}</div>
+
+    if (!cocktails || cocktails.length === 0)
+      return <h1>Cocktails not found</h1>
+
+    return cocktails.map(item => (
+      <CocktailDetails key={item.id} cocktail={item}/>
+    ))
+  }
 
   return (
     <div className={styles.container}>
@@ -20,15 +34,7 @@ export const CocktailPage: FC = () => {
       </nav>
 
       <main className={styles.main}>
-        {(() => {
-          if (isFetching) return <h1>Loading...</h1>
-          if (isError) return <div>{getErrorMessage(error)}</div>
-          if (!cocktails || cocktails.length === 0) return <h1>Cocktails not found</h1>
-
-          return cocktails.map(item => (
-            <CocktailDetails key={item.id} cocktail={item}/>
-          ))
-        })()}
+        {renderCocktails()}
       </main>
     </div>
   )
