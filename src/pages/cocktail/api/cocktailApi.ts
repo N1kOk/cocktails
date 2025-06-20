@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { CocktailDto } from '@/pages/cocktail/api/types'
+import type { CocktailDto } from '@/pages/cocktail/api/types.ts'
+import type { CocktailModel } from '@/pages/cocktail/model/types.ts'
+import { dynamicMiddleware, rootReducer } from '@/shared/redux'
 
 type Response = {
   drinks: CocktailDto[]
@@ -32,5 +34,8 @@ export const cocktailApi = createApi({
     }),
   }),
 })
+
+rootReducer.inject(cocktailApi)
+dynamicMiddleware.addMiddleware(cocktailApi.middleware)
 
 export const { useGetCocktailsByNameQuery } = cocktailApi

@@ -6,5 +6,9 @@ https://n1kok.github.io/cocktails-pages/
 
 ## Build
 
-`npm run build` 
-`npm run preview`
+```shell 
+npm run build
+``` 
+```shell
+npm run preview
+```

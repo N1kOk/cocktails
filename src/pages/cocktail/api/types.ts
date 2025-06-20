@@ -1,4 +1,4 @@
-export interface CocktailDto {
+export type CocktailDto = {
   idDrink: string
   strDrink: string
   strCategory: string
